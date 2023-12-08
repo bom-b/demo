@@ -1,0 +1,54 @@
+{% extends "body.html" %}
+{% block content %}
+<div id="content" class="container mt-5">
+    <div style="width:450px; margin:auto; background:yellow">
+    <h1> Address 상세보기 </h1>
+    <form method="post" action="" name="form1">
+     {% csrf_token %}
+    <input type="hidden" name="idx" value="{{addr.idx}}">
+    <fieldset>
+        <legend>Detail 예제 </legend>
+        <p>
+            <label>이름</label>
+            <input type="text" name="name" value="{{addr.name}}">
+        </p>
+        <p>
+            <label>전화번호</label> <input type="text" name="tel" value="{{addr.tel}}" >
+        </p>
+        <p>
+            <label>email</label> <input type="text" name="email" value="{{addr.email}}" >
+        </p>
+        <p>
+            <label >address</label> <input type="text" name="address" value="{{addr.address}}" >
+        </p>
+        <p style="text-align:center">
+            <input type="button" value="등록폼" id="writeBtn">
+            <input type="button" value="리스트" id="listBtn">
+            <input type="button" value="수정폼" id="updateBtn">
+            <input type="button" value="삭제" id="delBtn">
+        </p>
+    </fieldset>
+    </form>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(function(){
+            $('#writeBtn').click(function(){
+                location = "write";
+            });
+            $('#listBtn').click(function(){
+                location = "list";
+            });
+            $('#updateBtn').click(function(){
+                document.form1.action="update";
+                document.form1.submit();
+            });
+            // 주석작성
+            $('#delBtn').click(function(){
+                document.form1.action="delete";
+                document.form1.submit();
+            });
+        });
+    </script>
+</div>
+{% endblock content %}

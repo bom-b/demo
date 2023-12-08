@@ -1,0 +1,131 @@
+{% extends "body.html" %}
+{% block content %}
+<div id="content" class="container mt-5">
+
+
+    <div style="width:700px; margin:auto; background:yellow">
+        <h1> Address 상세보기 </h1>
+        <form method="post" action="" id="form1" name="form1" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{product.product_id}}">
+            <fieldset>
+                <legend>Detail</legend>
+                <p>
+                    <label>상품이름</label>
+                    <input type="text" name="product_name" value="{{product.product_name}}">
+                </p>
+                <p>
+                    <label>가격</label> <input type="text" name="price" value="{{product.price}}">
+                </p>
+                <p>
+                    <label>상세설명</label> <input type="text" name="description" value="{{product.description}}">
+                </p>
+                <p>
+                <div>
+                    <label>이미지</label> {% if product.picture_url != '-' %}<img id="now_img"
+                                                                               src="/static/images/{{product.picture_url}}"
+                                                                               style="width:200px">{% endif %}
+                </div>
+                <div style="margin-top:20px;">
+                    <input type="file" name="file1" id="file1">
+                </div>
+                <div>
+                    <img id="file_thumbnail" src="" style="width:150px">
+                </div>
+                <div style="margin-top:20px;">
+                    <input type="button" value="이미지만 수정" id="update_img">
+                </div>
+                </p>
+                <p style="text-align:center;">
+                    <input type="button" value="등록폼" id="writeBtn">
+                    <input type="button" value="리스트" id="listBtn">
+                    <input type="button" value="수정" id="updateBtn">
+                    <input type="button" value="삭제" id="delBtn">
+                </p>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<style>
+    #form1 p {margin-top:50px;}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(function(){
+        $('#writeBtn').click(function(){
+            location = "write";
+        });
+        $('#listBtn').click(function(){
+            location = "list";
+        });
+        // 게시글 전체 수정
+        $('#updateBtn').click(function(){
+            document.form1.action="update";
+            document.form1.submit();
+        });
+        // 이미지만 수정
+        $('#update_img').click(function(){
+             var formData = new FormData(); // 새 FormData 객체 생성
+             formData.append('file1', $('#file1')[0].files[0]); // 파일 정보 추가
+             formData.append('product_id', $('[name="product_id"]').val()); // product_id 정보 추가
+             formData.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val()); // CSRF 토큰 추가
+
+            $.ajax({
+                type: 'POST', // 전송방식
+                url: 'update_img', // 서버에 보낼 URL
+                data: formData, // 전송할 데이터
+                processData: false, // FormData와 함께 사용할 경우 false로 설정
+                contentType: false, // FormData와 함께 사용할 경우 false로 설정
+                success: function(response) {
+                    // 이미지 수정 및 삭제 성공 여부 알림
+                   alert(response.status);
+                   if (response.file_name !== '-') {
+                        // file_name이 '-'이 아닌 경우 이미지를 보이게하고 src값을 업데이트
+                        $('#now_img').show();
+                        $('#now_img').attr('src', '/static/images/' + response.file_name);
+                   } else {
+                        // file_name이 '-'인 경우 이미지를 숨김
+                        $('#now_img').hide();
+                   }
+                    // 업로드할 파일의 썸네일을 지운다.
+                   $('#file_thumbnail').attr('src', '');
+                },
+                error: function() {
+                    alert('이미지 업로드에 실패했습니다.');
+                }
+            });
+        });
+        $('#delBtn').click(function(){
+            document.form1.action="delete";
+            document.form1.submit();
+        });
+        // 파일 업로드 버튼의 상태가 바뀔경우 썸네일 바꾸는 함수를 호출
+        $('#file1').change(function() {
+            console.log($(this).val());
+            if ($(this).val().length > 0) {
+                readURL(this);
+            } else {
+                console.log("이미지 없음");
+            }
+
+        });
+    });
+    // 썸네일 바꾸는 함수
+    function readURL(input) {
+
+        // input type="file"의 주소를 가져온다.
+        if (input.files && input.files[0]) {
+
+            var reader = new FileReader();
+
+            // 리스너
+            reader.onload = function(e) {
+                console.log("이벤트 발생: " + e.target.result);
+                $('#file_thumbnail').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+{% endblock content %}

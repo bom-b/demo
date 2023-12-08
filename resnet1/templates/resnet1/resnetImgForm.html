@@ -1,0 +1,33 @@
+{% extends "body.html" %}
+{% block content %}
+<div id="content" class="container mt-5">
+    <form method="post" id="form1" name="form1" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset>
+            <p>
+                <label for="category">고양이이름</label>
+                <input name="category" type="text" id="category">
+            </p>
+            <p>
+                <label for="file1">상품이미지</label>
+                <input name="file1" type="file" id="file1">
+            </p>
+            <p>
+                <input type="button" id="wrtBtn" value="등록">
+                <input type="button" id="listBtn" value="목록">
+            </p>
+        </fieldset>
+    </form>
+</div>
+<script>
+    $(function (){
+        $('#listBtn').click(function (){
+            loaction='resnet1_list';
+        });
+        $('#wrtBtn').click(function() {
+            document.form1.action='resnet1_insert';
+            document.form1.submit();
+        })
+    })
+</script>
+{% endblock content %}

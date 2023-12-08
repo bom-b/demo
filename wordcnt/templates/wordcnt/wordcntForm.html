@@ -1,0 +1,21 @@
+{% extends "body.html" %}
+{% block content %}
+<div id="content" class="container mt-5">
+    <h2>Word Count</h2>
+    <div class="row">
+        <form method="post" action="wordcntProcess">
+            {% csrf_token %}
+            <fieldset>
+                <legend>Word Count 예제</legend>
+                <p>
+                    <label for="wordv">입력글</label>
+                    <textarea name="wordv" id="wordv" cols="80" rows="20"></textarea>
+                </p>
+                <p>
+                    <input type="submit" value="send">
+                </p>
+            </fieldset>
+        </form>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,55 @@
+{% extends "body.html" %}
+{% block content %}
+<div id="content" class="container mt-5">
+    <table id="customers">
+        <thead>
+        <tr>
+            <th>word</th>
+            <th>Count</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item, val in wordv_cnt_totalList %}
+        <tr>
+            <td>{{item}}</td>
+            <td>{{val}}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="2">
+                {% load static %}
+                {% static "" as baseUrl %}
+                <img src="{{baseUrl}}/wordcntImg/wordcnt.png" style="width: 100%">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<style>
+    #wrap{
+        width:450px; margin:auto;
+    }
+    #customers {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    #customers td, #customers th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    #customers tr:nth-child(even){background-color: #f2f2f2;}
+
+    #customers tr:hover {background-color: #ddd;}
+
+    #customers th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #04AA6D;
+      color: white;
+    }
+</style>
+{% endblock content %}

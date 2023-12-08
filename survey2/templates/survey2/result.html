@@ -1,0 +1,50 @@
+{% extends "body.html" %}
+{% block content %}
+<div id="content" class="container mt-5">
+    <h2 class="text-center">설문결과</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>문항</th>
+                <th>응답수</th>
+                <th>응답비율</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for row,ans in surveyList %}
+            <tr>
+                <td id="ans">{{ans}}</td>
+                <td id="sum_num">{{row.sum_num}}</td>
+                <td>{{row.rate}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <!--차트 연습문제 구현 영역-->
+    <h2 class="text-center mt-5">설문조사 차트</h2>
+    <div class="chart_donut" id="chart_donut">
+
+    </div>
+</div>
+<script>
+    $(function() {
+
+        var charData=[
+            {% for row, ans in surveyList %}
+                ['{{ans}}', {{row.sum_num}}],
+            {% endfor %}
+        ]
+
+        var chart = c3.generate({
+            bindto:'#chart_donut',
+            data : {
+                columns : charData,
+                type:'pie',
+                onclick: function (d, i) { console.log("onclick", d, i); },
+                onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+                onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+            }
+        })
+    });
+</script>
+{% endblock content %}

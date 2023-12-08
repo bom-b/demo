@@ -1,0 +1,42 @@
+{% extends "body.html" %}
+{% block content %}
+<div id="content" class="container mt-5">
+    <h2 class="text-center">Survey Form</h2>
+    <div class="row" style="margin-top: 50px;">
+        <form method="post" action="save_survey">
+            <input type="hidden" name="survey_idx" value="{{survey.survey_idx}}">
+            <fieldset style="width:400px; margin:auto;">
+                <legend>{{survey.question}}</legend>
+                <p>
+                    <label for="num1">{{survey.ans1}}</label>
+                    <input type="radio" name="num" id="num1" value="1">
+                </p>
+                <p>
+                    <label for="num2">{{survey.ans2}}</label>
+                    <input type="radio" name="num" id="num2" value="2">
+                </p>
+                <p>
+                    <label for="num3">{{survey.ans3}}</label>
+                    <input type="radio" name="num" id="num3" value="3">
+                </p>
+                <p>
+                    <label for="num1">{{survey.ans4}}</label>
+                    <input type="radio" name="num" id="num4" value="4">
+                </p>
+                <p style="text-align:right">
+                    <input type="submit" value="투표">
+                    <input type="button" value="결과확인" id="shresult">
+                </p>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<script>
+    $(function(){
+        // 결과확인 페이지로 이동하기
+        $("#shresult").click(function(){
+            location="show_result?survey_idx={{survey.survey_idx}}";
+        });
+    });
+</script>
+{% endblock content %}

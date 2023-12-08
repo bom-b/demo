@@ -1,0 +1,54 @@
+{% extends "body.html" %}
+{% block content %}
+<div id="content" class="container mt-5">
+    <h2 class="text-center">ChartJson Demo1 Django</h2>
+    <div style="width:900px; margin: auto">
+        <div><input type="button" value="click" id="jsonLoad"></div>
+        <div id="target"></div>
+        <div id="chart1" style="margin-top: 100px; height: 500px"></div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#jsonLoad').click(function () {
+            $.ajax({
+                url: 'loadJsonTest1',
+
+                success: function (data) {
+                    makeBarChart(data.data, data.columns)
+                }
+            });
+        });
+    });
+
+    function makeBarChart(jsonData, dcol) {
+        // bar chart에 들어갈 jsonData
+        var datas = []
+        var dcolumns = dcol.slice(1, dcol.length);
+        for (var key in jsonData) {
+            datas.push(jsonData[key])
+        }
+        console.log("----1");
+        console.log(datas);
+        // chart
+        var chart = c3.generate({
+            bindto: '#chart1',
+            data: {
+                columns: datas,
+                type: 'bar'
+            },
+            bar: {
+                width: {
+                    ratio: 0.5
+                }
+            },
+            axis: {
+                x: {
+                    type: 'category',
+                    categories: dcolumns
+                }
+            }
+        }); // chart end!
+    }
+</script>
+{% endblock content %}

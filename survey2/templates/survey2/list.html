@@ -1,0 +1,104 @@
+{% extends "body.html" %}
+{% block content %}
+<div id="content" class="container mt-5">
+    <h2 class="text-center">최신 설문</h2>
+    <div class="row" style="margin-top: 50px;">
+        <form method="post" action="">
+            {% csrf_token %}
+            <input type="hidden" name="survey_idx" value="{{survey.survey_idx}}">
+            <fieldset style="width:400px; margin:auto;">
+                <legend>{{survey.question}}</legend>
+                <p>
+                    <label for="num1">{{survey.ans1}}</label>
+                    <input type="radio" name="num" id="num1" value="1">
+                </p>
+                <p>
+                    <label for="num2">{{survey.ans2}}</label>
+                    <input type="radio" name="num" id="num2" value="2">
+                </p>
+                <p>
+                    <label for="num3">{{survey.ans3}}</label>
+                    <input type="radio" name="num" id="num3" value="3">
+                </p>
+                <p>
+                    <label for="num1">{{survey.ans4}}</label>
+                    <input type="radio" name="num" id="num4" value="4">
+                </p>
+                <p style="text-align:right">
+                    <input type="button" value="투표" id="vote">
+                    <input type="button" value="결과확인" id="shresult">
+                </p>
+            </fieldset>
+        </form>
+    </div>
+    <div id="chart-area">
+        <h2 class="text-center mt-5">설문 결과</h2>
+        <div class="chart_donut" id="chart_donut">
+            <!--차트 들어갈 자리-->
+        </div>
+    </div>
+
+</div>
+<script>
+    $(function(){
+        // 투표버튼 눌렀을 때,
+        $("#vote").click(function(){
+            var formData = new FormData();
+            formData.append('survey_idx', $('[name="survey_idx"]').val());
+            formData.append('num', $('[name="num"]:checked').val());
+            formData.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val()); // CSRF 토큰 추가
+            $.ajax({
+                type: 'POST',
+                url: 'save_survey2',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log('성공')
+                    show_chart(response)
+                },
+                error: function () {
+                    console.log('에러')
+                }
+            })
+        });
+        // 결과확인 버튼 눌렀을 때,
+        $("#shresult").click(function(){
+            $.ajax({
+                type: 'GET',
+                url: 'show_result2',
+                data: 'survey_idx={{survey.survey_idx}}',
+                success: function (response) {
+                    console.log('성공')
+                    show_chart(response)
+                },
+                error: function () {
+                    console.log('에러')
+                }
+            })
+        });
+
+        function show_chart(response) {
+
+            var charData=[];
+
+            for(let i = 0; i < response.surveyList.length; i++){
+                charData.push([response.surveyList[i].answer, response.surveyList[i].sum_num]);
+            }
+
+            var chart = c3.generate({
+                bindto:'#chart_donut',
+                data : {
+                    columns : charData,
+                    type:'pie',
+                    onclick: function (d, i) { console.log("onclick", d, i); },
+                    onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+                    onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+                }
+            })
+        }
+    });
+
+
+</script>
+{% endblock content %}

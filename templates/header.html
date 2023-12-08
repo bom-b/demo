@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa; /* 부트스트랩의 기본 배경색과 유사한 색상 */
+        }
+
+        .p-5 {
+            background: linear-gradient(to right, #007bff, #6610f2); /* 그라데이션 배경색 */
+            color: #ffffff; /* 흰색 텍스트 */
+            padding: 3rem; /* 여백 추가 */
+        }
+
+        .navbar {
+            background: linear-gradient(to right, #343a40, #6c757d); /* 다크 그레이색의 그라데이션 배경색 */
+        }
+
+        .navbar-brand img {
+            filter: brightness(0.8); /* 로고 이미지를 조금 어둡게 만듭니다. */
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff; /* 네비게이션 링크 텍스트 색상을 흰색으로 설정합니다. */
+            margin-right: 15px; /* 링크 간격을 늘립니다. */
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ffc107; /* 링크에 마우스 호버시 색상 변경 */
+        }
+
+        #content {
+            margin: auto;
+            width: 80%;
+        }
+
+        ul.pagination li {
+            text-decoration: none;
+            list-style: none;
+            margin-left: 3px;
+            float: left;
+        }
+
+        .cth {
+            background: #ffccdd;
+        }
+
+        /* 화려한 스타일을 위한 추가적인 스타일 */
+        h1, h2, h3, h4, h5, h6 {
+            color: #007bff; /* 제목 텍스트 색상을 부트스트랩의 파란색으로 설정합니다. */
+        }
+
+        /* 추가적인 화려한 스타일을 위한 클래스 */
+        .glow-text {
+            text-shadow: 2px 2px 4px #007bff; /* 텍스트에 선명한 그롬 효과를 추가합니다. */
+        }
+
+        /* 버튼에 반짝이는 효과를 추가합니다. */
+        .glow-btn {
+            box-shadow: 0 0 10px #007bff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="p-5 text-white text-center glow-text">
+    <!--<div class="col-sm-3 text-center">
+        <img src="/static/images/home.png" style="width:100px;">
+    </div>-->
+    <div class="col-sm-9 text-center">
+        <h1>ICT 배너 들어 올 자리</h1>
+        <p>ICT Django 수업이고 여기에 캐러셀 메뉴를 넣어도 됨</p>
+    </div>
+</div>
+
+<nav class="navbar navbar-expand-sm navbar-dark">
+    <div id="header" class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="/static/images/chun2.png" style="width:40px;" class="rounded-pill">
+        </a>
+        <ul class="navbar-nav">
+            <!-- 네비게이션 링크에 추가된 화려한 스타일 클래스 -->
+            <li class="nav-item"><a href="/" class="nav-link active glow-text">Home</a></li>
+            <li class="nav-item"><a href="/admin" class="nav-link active glow-text">Admin</a></li>
+            <li class="nav-item"><a href="/address/list" class="nav-link active glow-text">Address</a></li>
+            <li class="nav-item"><a href="/shop/write" class="nav-link active glow-text">shop_form</a></li>
+            <li class="nav-item"><a href="/shop/list" class="nav-link active glow-text">shop_list</a></li>
+            <li class="nav-item"><a href="/survey/survey_list" class="nav-link active glow-text">save_survey</a></li>
+<!--            <li class="nav-item"><a href="/survey/surveyForm" class="nav-link active glow-text">Ora_surveyForm</a></li>-->
+            <li class="nav-item"><a href="/survey2/survey_list2" class="nav-link active glow-text">연습 설문</a></li>
+            <li class="nav-item"><a href="/resapi/loadJsonTest1" class="nav-link active glow-text">chartdemo1</a></li>
+            <li class="nav-item"><a href="/resapi/chartJson" class="nav-link active glow-text">chartdemo3</a></li>
+            <li class="nav-item"><a href="/resnet1/resnet1_form" class="nav-link active glow-text">resnet1_form</a></li>
+            <li class="nav-item"><a href="/wordcnt/wordcntForm" class="nav-link active glow-text">wordCnt</a></li>
+            <li class="nav-item"><a href="/member/member" class="nav-link active glow-text">MemberJoin</a></li>
+            <!-- 로그인 버튼에 추가된 화려한 스타일 클래스 -->
+
+            {% if 'user_name' in request.session %}
+            <li class="nav-item">
+                <button class="btn btn-outline-primary me-2 glow-btn" type="button" onclick="location='/login/mypage'">MyPage</button>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-outline-primary me-2 glow-btn" type="button">{{request.session.user_name}}님</button>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-outline-primary me-2 glow-btn" type="button" onclick="location='/login/logout'">logout</button>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <button class="btn btn-outline-primary me-2 glow-btn" type="button" onclick="location='/member/member'">join</button>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-outline-primary me-2 glow-btn" type="button" onclick="location='/login/login'">Login</button>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+<script>
+{% if request.session.waring %}
+
+    alert("{{request.session.waring_ip}}");
+
+{% endif %}
+</script>
+
+
+

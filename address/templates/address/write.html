@@ -1,0 +1,24 @@
+{% extends "body.html" %}
+{% block content %}
+<div id="content" class="container mt-5">
+    <div>
+        <h2>Address 주소록 등록 폼 {{msg}}</h2>
+        <form method="post" action="insert">
+            {% csrf_token %} <!--장고가 지원해주는 보안 토큰-->
+            <p> 이름 : <input type="text" name="name" id="name"></p>
+            <p> 전화번호 : <input type="text" name="tel" id="tel"></p>
+            <p> 이메일 : <input type="email" name="email" id="email"></p>
+            <p> 주소 : <input type="text" name="address" id="address"></p>
+            <input type="submit" value="등록">
+            <input type="button" value="리스트" id="listBtn">
+        </form>
+    </div>
+    <script>
+        $(function(){
+            $('#listBtn').click(function(){
+                location = 'list'
+            });
+        });
+    </script>
+</div>
+{% endblock content %}
